@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repo-response-judge-workbench"
+version = "0.1.0"
+description = "Compare two AI coding-agent responses with evidence-first repo evaluation scoring."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Kartik Mishra" }]
+license = { text = "MIT" }
+keywords = ["repo-evaluation", "llm-evaluation", "coding-agents", "labeling", "model-comparison", "python"]
+
+[project.scripts]
+repo-response-judge = "repo_response_judge.cli:main"

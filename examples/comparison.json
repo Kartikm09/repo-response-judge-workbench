@@ -1,0 +1,20 @@
+{
+  "task_id": "synthetic-bugfix-comparison",
+  "prompt": "Fix a failing API parser test without changing unrelated behavior.",
+  "response_a": {
+    "final_status": "solves_task",
+    "tests_passed": true,
+    "files_changed": ["src/parser.py", "tests/test_parser.py"],
+    "commands": ["python -m unittest discover -s tests"],
+    "introduced_regression": false,
+    "rationale_has_evidence": true
+  },
+  "response_b": {
+    "final_status": "partial",
+    "tests_passed": false,
+    "files_changed": ["src/parser.py"],
+    "commands": [],
+    "introduced_regression": true,
+    "rationale_has_evidence": false
+  }
+}
