@@ -1,0 +1,7 @@
+{
+  "task_id": "task-001",
+  "total_duration_ms": 120,
+  "stages": {
+    "build": 120
+  }
+}

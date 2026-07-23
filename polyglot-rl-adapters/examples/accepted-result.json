@@ -1,0 +1,22 @@
+{
+  "task_id": "task-001",
+  "classification": "accepted",
+  "accepted": true,
+  "score": 100,
+  "changed_files": [
+    {
+      "path": "src/service.ts",
+      "before_sha256": "synthetic-before",
+      "after_sha256": "synthetic-after"
+    }
+  ],
+  "stages": [
+    {
+      "name": "build",
+      "passed": true,
+      "return_code": 0,
+      "duration_ms": 120,
+      "command": ["npm", "run", "build"]
+    }
+  ]
+}

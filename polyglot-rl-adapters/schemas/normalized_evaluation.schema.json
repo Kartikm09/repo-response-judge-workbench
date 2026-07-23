@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Kartikm09/repo-response-judge-workbench/schemas/normalized_evaluation.schema.json",
+  "title": "Normalized Polyglot RL Evaluation",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "environment",
+    "language",
+    "task_id",
+    "classification",
+    "accepted",
+    "score",
+    "maximum_score",
+    "changed_files",
+    "stages"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "environment": { "type": "string", "minLength": 1 },
+    "language": { "enum": ["Java", "Rust", "Go", "TypeScript"] },
+    "task_id": { "type": "string", "pattern": "^task-[0-9]{3}$" },
+    "classification": { "type": "string", "minLength": 1 },
+    "accepted": { "type": "boolean" },
+    "score": { "type": "integer", "minimum": 0 },
+    "maximum_score": { "type": "integer", "minimum": 1 },
+    "changed_files": { "type": "array", "items": { "type": "object" } },
+    "stages": { "type": "array", "items": { "type": "object" } },
+    "benchmark": { "type": ["object", "null"] }
+  },
+  "additionalProperties": false
+}
