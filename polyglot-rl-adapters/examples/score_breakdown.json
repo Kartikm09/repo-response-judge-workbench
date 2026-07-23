@@ -1,0 +1,13 @@
+{
+  "maximum": 100,
+  "score": 100,
+  "weights": {
+    "build": 15,
+    "public_tests": 25,
+    "held_out_tests": 30,
+    "regression_tests": 15,
+    "format": 5,
+    "lint": 5,
+    "determinism": 5
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "environments": [
+    {
+      "adapter": "java_adapter.py",
+      "language": "Java",
+      "repository": "https://github.com/Kartikm09/java-refactoring-rl-environment"
+    },
+    {
+      "adapter": "rust_adapter.py",
+      "language": "Rust",
+      "repository": "https://github.com/Kartikm09/rust-systems-reliability-rl-lab"
+    },
+    {
+      "adapter": "go_adapter.py",
+      "language": "Go",
+      "repository": "https://github.com/Kartikm09/go-concurrency-performance-rl-lab"
+    },
+    {
+      "adapter": "typescript_adapter.py",
+      "language": "TypeScript",
+      "repository": "https://github.com/Kartikm09/typescript-service-reliability-rl-lab"
+    }
+  ]
+}
