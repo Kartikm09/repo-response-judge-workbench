@@ -1,20 +1,104 @@
 {
   "task_id": "synthetic-bugfix-comparison",
-  "prompt": "Fix a failing API parser test without changing unrelated behavior.",
+  "classification": "synthetic input demonstration, not an actual parser execution",
+  "requirements": [
+    {
+      "id": "parse",
+      "expected_behavior": "Reject invalid API payloads",
+      "kind": "correctness"
+    },
+    {
+      "id": "preserve",
+      "expected_behavior": "Preserve valid payload outputs",
+      "kind": "regression"
+    }
+  ],
+  "allowed_paths": [
+    "src/**",
+    "tests/**"
+  ],
   "response_a": {
-    "final_status": "solves_task",
-    "tests_passed": true,
-    "files_changed": ["src/parser.py", "tests/test_parser.py"],
-    "commands": ["python -m unittest discover -s tests"],
-    "introduced_regression": false,
-    "rationale_has_evidence": true
+    "files_changed": [
+      "src/parser.py",
+      "tests/test_parser.py"
+    ],
+    "commands": [
+      {
+        "id": "unit",
+        "argv": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests"
+        ],
+        "exit_code": 0,
+        "started_at": "2026-09-18T00:00:00Z",
+        "finished_at": "2026-09-18T00:00:01Z"
+      }
+    ],
+    "test_results": [
+      {
+        "command_id": "unit",
+        "requirement_ids": [
+          "parse",
+          "preserve"
+        ],
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      }
+    ],
+    "explanation": {
+      "text": "Parser validation preserves the API contract. See the changed parser and regression requirement.",
+      "source_refs": [
+        "parse",
+        "preserve",
+        "src/parser.py"
+      ]
+    }
   },
   "response_b": {
-    "final_status": "partial",
-    "tests_passed": false,
-    "files_changed": ["src/parser.py"],
-    "commands": [],
-    "introduced_regression": true,
-    "rationale_has_evidence": false
+    "files_changed": [
+      "src/parser.py",
+      "tests/test_parser.py"
+    ],
+    "commands": [
+      {
+        "id": "unit",
+        "argv": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests"
+        ],
+        "exit_code": 1,
+        "started_at": "2026-09-18T00:00:00Z",
+        "finished_at": "2026-09-18T00:00:01Z"
+      }
+    ],
+    "test_results": [
+      {
+        "command_id": "unit",
+        "requirement_ids": [
+          "parse",
+          "preserve"
+        ],
+        "passed": 1,
+        "failed": 1,
+        "skipped": 0
+      }
+    ],
+    "explanation": {
+      "text": "A convincing explanation claims robust handling, but the supplied test execution contradicts that conclusion.",
+      "source_refs": [
+        "parse",
+        "preserve",
+        "src/parser.py"
+      ]
+    }
   }
 }
