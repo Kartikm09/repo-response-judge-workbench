@@ -39,8 +39,22 @@ def load_evaluation(report_directory: Path, environment: str, language: str) -> 
     result = _load_json(report_directory / "result.json")
     timing = _load_json(report_directory / "timing.json")
     score = _load_json(report_directory / "score_breakdown.json")
+    if type(result.get("accepted")) is not bool:
+        raise ValueError("accepted must be a boolean")
+    if type(result.get("score")) is not int or type(score.get("maximum", 100)) is not int:
+        raise ValueError("Scores must be integers")
+    if not 0 <= result["score"] <= score.get("maximum", 100) or score.get("maximum", 100) <= 0:
+        raise ValueError("Score is outside its declared range")
+    if score.get("score") != result["score"]:
+        raise ValueError("Score artifacts contradict each other")
+    if not isinstance(result.get("stages"), list) or not result["stages"]:
+        raise ValueError("Missing stage execution evidence")
     stages = []
     for stage in result.get("stages", []):
+        if type(stage.get("passed")) is not bool:
+            raise ValueError("stage passed must be a boolean")
+        if stage["passed"] and (type(stage.get("return_code")) is not int or stage["return_code"] != 0):
+            raise ValueError("Passing stage contradicts its exit code")
         stages.append(
             {
                 "name": stage["name"],
@@ -50,6 +64,8 @@ def load_evaluation(report_directory: Path, environment: str, language: str) -> 
                 "command": stage.get("command", []),
             }
         )
+    if result["accepted"] and (result.get("classification") != "accepted" or any(not s["passed"] for s in stages)):
+        raise ValueError("Accepted result contradicts execution evidence")
     benchmark = next((stage for stage in stages if stage["name"] == "benchmark"), None)
     return NormalizedEvaluation(
         environment=environment,
@@ -66,12 +82,12 @@ def load_evaluation(report_directory: Path, environment: str, language: str) -> 
 
 
 def compare(left: NormalizedEvaluation, right: NormalizedEvaluation) -> dict[str, Any]:
-    if left.task_id != right.task_id:
-        raise ValueError("Evaluations must target the same task ID")
+    if (left.task_id, left.environment, left.language) != (right.task_id, right.environment, right.language):
+        raise ValueError("Evaluations must target the same task ID, environment and language")
     score_delta = left.score - right.score
-    if score_delta > 0:
+    if (left.accepted, left.score) > (right.accepted, right.score):
         preferred = "left"
-    elif score_delta < 0:
+    elif (left.accepted, left.score) < (right.accepted, right.score):
         preferred = "right"
     else:
         preferred = "tie"

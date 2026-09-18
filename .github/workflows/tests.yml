@@ -14,3 +14,7 @@ jobs:
           python-version: "3.11"
       - name: Run tests
         run: PYTHONPATH=src python -m unittest discover -s tests
+      - name: Run polyglot adapter tests
+        run: python -m unittest discover -s polyglot-rl-adapters/tests -v
+      - name: Exercise evidence-aware CLI
+        run: PYTHONPATH=src python -m repo_response_judge.cli judge examples/comparison.json --format json

@@ -13,7 +13,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("path", type=Path)
     parser.add_argument("--format", choices=["text", "json"], default="text")
     args = parser.parse_args(argv)
-    result = judge_comparison(json.loads(args.path.read_text(encoding="utf-8")))
+    try:
+        result = judge_comparison(json.loads(args.path.read_text(encoding="utf-8")))
+    except (ValueError, TypeError, KeyError) as exc:
+        parser.error(f"Evidence rejected: {exc}")
     if args.format == "json":
         print(json.dumps(result.to_dict(), indent=2))
     else:

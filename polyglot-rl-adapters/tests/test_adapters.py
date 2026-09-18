@@ -58,6 +58,35 @@ class AdapterTests(unittest.TestCase):
             self.assertEqual(comparison["score_delta"], 50)
             self.assertIn("Patch Comparison", comparison_markdown(comparison))
 
+    def test_rejects_contradictory_acceptance(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.write_report(root, 100, True)
+            payload = json.loads((root / "result.json").read_text())
+            payload["stages"][0]["return_code"] = 1
+            (root / "result.json").write_text(json.dumps(payload))
+            with self.assertRaises(ValueError):
+                load_evaluation(root, "typescript", "TypeScript")
+
+    def test_rejects_string_boolean(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.write_report(root, 100, True)
+            payload = json.loads((root / "result.json").read_text())
+            payload["accepted"] = "false"
+            (root / "result.json").write_text(json.dumps(payload))
+            with self.assertRaises(ValueError):
+                load_evaluation(root, "typescript", "TypeScript")
+
+    def test_known_failure_cannot_outrank_accepted_by_score(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary); left = root / "left"; right = root / "right"
+            left.mkdir(); right.mkdir()
+            self.write_report(left, 100, False); self.write_report(right, 80, True)
+            comparison = compare(load_evaluation(left, "typescript", "TypeScript"),
+                                 load_evaluation(right, "typescript", "TypeScript"))
+            self.assertEqual(comparison["preferred"], "right")
+
     def test_rejects_mismatched_task_ids(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

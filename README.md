@@ -39,3 +39,16 @@ build, test, benchmark, and score evidence from four independent synthetic engin
 
 Use `polyglot-rl-adapters/compare_reports.py` to compare two candidate patches for the same
 task and generate reviewer-ready JSON and Markdown evidence.
+
+## Evidence contract and verification
+
+`make verify` runs core tests, legacy adapter tests and the CLI example. The original commands
+remain supported. Input now requires expected behavior, allowed file scope, timestamped command
+records, exit codes and requirement-linked test counts; missing or contradictory evidence is
+rejected. See the [RFC](docs/evidence-contract-rfc.md), [defect and review record](docs/defect-and-review.md)
+and [ADRs](docs/adr/0001-reject-unsupported-ratings.md).
+
+The example deliberately pairs convincing prose with a failing implementation. Correctness,
+regression risk and explanation quality remain separate. Example parser executions are synthetic
+input records, not actual parser runs. The workbench validates supplied evidence and does not
+independently authenticate its provenance or execute submitted command strings.
