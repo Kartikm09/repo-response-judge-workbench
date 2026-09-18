@@ -87,6 +87,22 @@ class AdapterTests(unittest.TestCase):
                                  load_evaluation(right, "typescript", "TypeScript"))
             self.assertEqual(comparison["preferred"], "right")
 
+    def test_rejects_different_score_scales(self) -> None:
+        from dataclasses import replace
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary); self.write_report(root, 80, True)
+            left = load_evaluation(root, "typescript", "TypeScript")
+            with self.assertRaises(ValueError):
+                compare(left, replace(left, maximum_score=200, score=100))
+
+    def test_malformed_stage_is_an_evidence_error(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary); self.write_report(root, 100, True)
+            value = json.loads((root / "result.json").read_text()); value["stages"] = [None]
+            (root / "result.json").write_text(json.dumps(value))
+            with self.assertRaises(ValueError):
+                load_evaluation(root, "typescript", "TypeScript")
+
     def test_rejects_mismatched_task_ids(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

@@ -51,6 +51,8 @@ def load_evaluation(report_directory: Path, environment: str, language: str) -> 
         raise ValueError("Missing stage execution evidence")
     stages = []
     for stage in result.get("stages", []):
+        if not isinstance(stage, dict):
+            raise ValueError("Stage must be an object")
         if type(stage.get("passed")) is not bool:
             raise ValueError("stage passed must be a boolean")
         if stage["passed"] and (type(stage.get("return_code")) is not int or stage["return_code"] != 0):
@@ -84,6 +86,8 @@ def load_evaluation(report_directory: Path, environment: str, language: str) -> 
 def compare(left: NormalizedEvaluation, right: NormalizedEvaluation) -> dict[str, Any]:
     if (left.task_id, left.environment, left.language) != (right.task_id, right.environment, right.language):
         raise ValueError("Evaluations must target the same task ID, environment and language")
+    if left.maximum_score != right.maximum_score:
+        raise ValueError("Evaluations must use the same score scale")
     score_delta = left.score - right.score
     if (left.accepted, left.score) > (right.accepted, right.score):
         preferred = "left"

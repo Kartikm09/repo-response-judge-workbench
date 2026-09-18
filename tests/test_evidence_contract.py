@@ -36,6 +36,10 @@ class EvidenceContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             judge_comparison(data)
 
+    def test_nonobject_payload_rejected(self):
+        with self.assertRaises(ValueError):
+            judge_comparison([])
+
     def test_missing_requirements_rejected(self):
         data = payload(); del data['requirements']
         with self.assertRaises(ValueError):

@@ -39,3 +39,5 @@ Unit tests exercise accepted, failed and refused judgments. The CLI runs the syn
 example; adapter tests preserve older report imports. Negative tests mutate one input field at
 a time. No external model/API keys or hidden reasoning are needed. `make verify` runs all three
 layers. There is no browser UI, production deployment or claim of adversarial sandboxing.
+
+Independent review found a further comparison boundary: raw scores with different maxima cannot be compared fairly. The adapter now refuses mixed scales and rejects malformed stage objects cleanly. These reviewer findings were reproduced before correction; final tests cover 14 core and 7 adapter cases.

@@ -59,6 +59,8 @@ def _timestamp(value: Any) -> datetime:
 
 def judge_comparison(payload: dict[str, Any]) -> Judgment:
     """Reject absent/contradictory records; prose cannot override failing tests."""
+    if not isinstance(payload, dict):
+        raise ValueError("Comparison must be an object")
     task_id = _text(payload.get("task_id"), "task_id")
     requirements: dict[str, str] = {}
     for requirement in _nonempty_list(payload.get("requirements"), "requirements"):
